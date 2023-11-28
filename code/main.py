@@ -210,7 +210,7 @@ class Model_Run(object):
 		hits5_file = open(self.datapath + "_hits5.txt", "w")
 		hits1_file = open(self.datapath + "_hits1.txt", "w")
 		mrr_file = open(self.datapath + "_mrr.txt", "w")
-		for data in train_generate(self.datapath, self.batch_size, self.few, self.symbol2id, self.ent2id, self.e1rel_e2):
+		for data in train_generate(self.datapath, self.batch_size, self.few, self.symbol2id, self.ent2id, self.max_batches):
 			support, query, false, support_left, support_right, query_left, query_right, false_left, false_right = data	
 
 			support_meta = self.get_meta(support_left, support_right)
