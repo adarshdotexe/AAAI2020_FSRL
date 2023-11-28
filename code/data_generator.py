@@ -5,12 +5,14 @@ import numpy as np
 def train_generate(datapath, batch_size, few, symbol2id, ent2id, max_batches):
 	train_tasks = json.load(open(datapath + '/train_tasks.json'))
 	rel2candidates = json.load(open(datapath + '/rel2candidates_all.json'))
+	ent_embed = np.loadtxt(datapath + '/embed/entity2vec.' + 'TransE')
 	# for i in ['DistMult', 'TransE', 'ComplEx', 'RESCAL']:
 	# 	ent_embed.append(np.loadtxt(datapath + '/embed/entity2vec.' + i))
 	task_pool = list(train_tasks.keys())
 	#print (task_pool[0])
 
 	num_tasks = len(task_pool)
+	t = 0
 	# for query_ in train_tasks.keys():
 	# 	print len(train_tasks[query_])
 	# 	if len(train_tasks[query_]) < 4:
@@ -18,7 +20,7 @@ def train_generate(datapath, batch_size, few, symbol2id, ent2id, max_batches):
 
 	# data contains score of each noise entity for each e1 in each relation
 	# data[rel][e1][noise] = score
-	data = json.load(open(datapath + '/data.json'))
+	data = json.load(open(datapath + '/data2.json'))
 
 	rel_idx = 0
 	while True:
@@ -72,7 +74,11 @@ def train_generate(datapath, batch_size, few, symbol2id, ent2id, max_batches):
 		false_right = []
 		for triple in query_triples:
 			e_h = triple[0]
-			noise = random.choice(list(data[query][e_h].keys()))
+			num = len(data[query][e_h]) - (rel_idx*len(data[query][e_h])//max_batches)
+			num = max((len(data[query][e_h])*0.2)//1, num)
+			k = list(data[query][e_h][:num])
+			l = random.choice(k)
+			noise = l[0]
 			false_pairs.append([symbol2id[e_h], symbol2id[noise]])
 			false_left.append(ent2id[e_h])
 			false_right.append(ent2id[noise])

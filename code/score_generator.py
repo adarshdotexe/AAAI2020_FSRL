@@ -39,5 +39,5 @@ json.dump(data, open(datapath + '/data.json', 'w'))
 for rel in task_pool:
   print("\t\tRel: ", rel)
   for e1 in tqdm(data[rel].keys()):
-    data[rel][e1] = sorted(data[rel][e1].items(), key=lambda kv: kv[1], reverse=True)
+    data[rel][e1] = sorted(data[rel][e1].items(), key=lambda x: x[1], reverse=True)
 json.dump(data, open(datapath + '/data.json', 'w'))
