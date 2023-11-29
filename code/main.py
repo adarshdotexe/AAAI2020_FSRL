@@ -261,6 +261,7 @@ class Model_Run(object):
 				print ('batch num: '+str(self.batch_nums))
 				print ('loss: '+str(loss))
 				hits10, hits5, hits1, mrr = self.eval(meta=self.meta)
+				self.eval(meta=self.meta, mode="dev")
 				#print (hits10)
 				hits10_file.write(str(("%.3f" % hits10)) + "\n")
 				hits5_file.write(str(("%.3f" % hits5)) + "\n")

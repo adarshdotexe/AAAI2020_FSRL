@@ -1,5 +1,6 @@
 import json
 import random
+import math
 import numpy as np
 
 def train_generate(datapath, batch_size, few, symbol2id, ent2id, max_batches):
@@ -75,7 +76,7 @@ def train_generate(datapath, batch_size, few, symbol2id, ent2id, max_batches):
 		for triple in query_triples:
 			e_h = triple[0]
 			num = len(data[query][e_h]) - (rel_idx*len(data[query][e_h])//max_batches)
-			num = max((len(data[query][e_h])*0.2)//1, num)
+			num = max((math.ceil(len(data[query][e_h])*0.2), num))
 			k = list(data[query][e_h][:num])
 			l = random.choice(k)
 			noise = l[0]
