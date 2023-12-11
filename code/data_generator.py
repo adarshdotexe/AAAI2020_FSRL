@@ -75,8 +75,13 @@ def train_generate(datapath, batch_size, few, symbol2id, ent2id, max_batches):
 		false_right = []
 		for triple in query_triples:
 			e_h = triple[0]
-			num = len(data[query][e_h]) - (rel_idx*len(data[query][e_h])//max_batches)
-			num = max((math.ceil(len(data[query][e_h])*0.2), num))
+			l = len(data[query][e_h])
+			p  = (max_batches - rel_idx)/max_batches
+			c1 = 7
+			c2 = 0.4
+			p = 1/(1+math.exp(-c1*(p-c2)))
+			p = max(0.2,p)
+			num = math.ceil(l * p)
 			k = list(data[query][e_h][:num])
 			l = random.choice(k)
 			noise = l[0]
