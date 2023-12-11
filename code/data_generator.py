@@ -79,7 +79,7 @@ def train_generate(datapath, batch_size, few, symbol2id, ent2id, max_batches):
 			p  = (max_batches - rel_idx)/max_batches
 			c1 = 7
 			c2 = 0.4
-			p = 1/(1+math.exp(-c1*(p-c2)))
+			# p = 1/(1+math.exp(-c1*(p-c2)))
 			p2 = max(0.2,p)
 			p1 = p-0.2
 			num2 = math.ceil(l * p2)
