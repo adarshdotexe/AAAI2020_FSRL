@@ -84,6 +84,8 @@ def train_generate(datapath, batch_size, few, symbol2id, ent2id, max_batches):
 			p1 = p-0.2
 			num2 = math.ceil(l * p2)
 			num1 = math.ceil(l*p1)
+			if(num1==num2):
+				num2+=1
 			k = list(data[query][e_h][num1:num2])
 			l = random.choice(k)
 			noise = l[0]
