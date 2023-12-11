@@ -24,20 +24,15 @@ for rel in task_pool:
     for noise in rel2candidates[rel]:
       if data[rel].get(e1) is None:
         data[rel][e1] = dict()
-      if noise not in e1rel_e2[e1+rel] and noise != e2:
-        e2_embed = list(ent_embed[ent2id[e2],:])
-        curr = np.dot(e2_embed, noise_embed)
+      if noise not in e1rel_e2[e1+rel] and noise != e2 and noise not in list(data[rel][e1].keys()):
+        e1_embed = np.array(ent_embed[ent2id[e1],:])
+        e2_embed = np.array(ent_embed[ent2id[e2],:])
+        curr = 0
+        noise_embed = np.array(ent_embed[ent2id[noise],:])
+        temp = np.dot(e1_embed, noise_embed)
         for e3 in e1rel_e2[e1+rel]:
-          e3_embed = list(ent_embed[ent2id[e3],:])
-          noise_embed = list(ent_embed[ent2id[noise],:])
-          curr += np.dot(e3_embed, noise_embed)
+          e3_embed = np.array(ent_embed[ent2id[e3],:])
+          curr += float(max(float(np.dot(noise_embed, e3_embed)), float(temp)))
         data[rel][e1][noise] = curr
 
-json.dump(data, open(datapath + '/data.json', 'w'))
-
-# Sort data for each e1 and relation
-for rel in task_pool:
-  print("\t\tRel: ", rel)
-  for e1 in tqdm(data[rel].keys()):
-    data[rel][e1] = sorted(data[rel][e1].items(), key=lambda x: x[1], reverse=True)
 json.dump(data, open(datapath + '/data.json', 'w'))
