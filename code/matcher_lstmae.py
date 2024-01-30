@@ -42,6 +42,8 @@ class EmbedMatcher_LSTMAE(nn.Module):
 		self.FC_query_g = nn.Linear(2 * self.embed_dim, 2 * self.embed_dim)
 		self.FC_support_g_encoder = nn.Linear(2 * self.embed_dim, 2 * self.embed_dim)
 
+		self.linearlayer = nn.Linear(self.embed_dim, 1)
+
 		init.xavier_normal_(self.gnn_w.weight)
 		init.xavier_normal_(self.neigh_att_W.weight)
 		init.xavier_normal_(self.neigh_att_u.weight)
@@ -170,7 +172,10 @@ class EmbedMatcher_LSTMAE(nn.Module):
 		#query_g = self.FC_query_g(query_g)
 		#support_g_encoder = self.FC_support_g_encoder(support_g_encoder)
 
-		matching_scores = torch.matmul(query_f, support_g_encoder.t()).squeeze()
+		# matching_scores = torch.matmul(query_f, support_g_encoder.t()).squeeze()
+
+		dis = torch.norm(query_f - support_g_encoder, dim=1)
+		matching_scores = self.linearlayer(dis)
 
 		return matching_scores, ae_loss, support_g_encoder, query_g
 
